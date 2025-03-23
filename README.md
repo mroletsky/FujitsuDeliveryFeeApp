@@ -103,8 +103,7 @@ If the selected vehicle type is forbidden for the given city or weather conditio
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/fujitsu-delivery-fee-api.git
-cd fujitsu-delivery-fee-api
+git clone https://github.com/mroletsky/FujitsuDeliveryFeeApp.git
 ```
 
 2. Build the project using Maven:
