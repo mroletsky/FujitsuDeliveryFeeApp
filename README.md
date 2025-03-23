@@ -7,6 +7,8 @@ This API calculates delivery fees based on weather conditions, vehicle type, and
 
 ### POST /api/delivery-fee
 
+Base URL: `http://localhost:8080/api/delivery-fee`
+
 This endpoint calculates the delivery fee based on the provided `City` and `VehicleType`.
 
 #### Request Body
@@ -119,3 +121,33 @@ mvn spring-boot:run
 ```
 
 4. The application will be accessible at `http://localhost:8080`.
+
+
+## Changing the Cron Expression
+
+The cron expression used to fetch weather reports can be modified at runtime through program arguments or environment variables. By default, the cron expression is defined in `application.properties`.
+
+### Default Cron Expression:
+
+In `application.properties`:
+
+```properties
+fetch.cron.expression=0 15 * * * *
+```
+
+This fetches weather reports every hour at the 15th minute.
+
+### Changing via Program Arguments
+
+You can override the default cron expression by passing it as a program argument when running the application:
+
+```bash
+--fetch.cron.expression="0 30 * * * *"
+```
+### Changing via Environment Variables
+
+Alternatively, you can set the cron expression as an environment variable before running the application:
+
+```bash
+FETCH_CRON_EXPRESSION="0 30 * * * *"
+```
