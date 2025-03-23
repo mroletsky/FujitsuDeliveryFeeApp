@@ -3,11 +3,14 @@ package org.example.fujitsudeliveryfeeapp.scheduler;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import org.example.fujitsudeliveryfeeapp.entity.WeatherReport;
 import org.example.fujitsudeliveryfeeapp.repository.WeatherReportRepository;
 import org.example.fujitsudeliveryfeeapp.xmlmodel.Observations;
 import org.example.fujitsudeliveryfeeapp.xmlmodel.Station;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -22,6 +25,8 @@ import java.time.LocalDateTime;
 @Component
 public class WeatherReportFetcher {
 
+    private static final Logger log = LoggerFactory.getLogger(WeatherReportFetcher.class);
+
     @Value("${weather.fetch.url}")
     private String url;
 
@@ -31,6 +36,9 @@ public class WeatherReportFetcher {
         this.repository = repository;
     }
 
+    /**
+     * Method for fetching weather data from provided url
+     */
     @PostConstruct
     @Scheduled(cron = "${fetch.cron.expression}")
     @Transactional
@@ -64,10 +72,12 @@ public class WeatherReportFetcher {
                     System.out.println("Weather reports fetched and saved successfully.");
                 }
             } else {
-                throw new IOException("HTTP error code: " + responseCode);
+                log.error("Failed to fetch weather data. HTTP error code: {}", responseCode);
             }
+        } catch (IOException | JAXBException e) {
+            log.error("Failed to fetch and save weather reports due to exception: {}", e.getMessage(), e);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to fetch and save weather reports", e);
+            log.error("Unexpected error while fetching weather reports: {}", e.getMessage(), e);
         }
     }
 
