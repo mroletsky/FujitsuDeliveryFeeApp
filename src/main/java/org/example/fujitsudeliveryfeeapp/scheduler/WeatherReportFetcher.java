@@ -69,7 +69,7 @@ public class WeatherReportFetcher {
                             repository.save(report);
                         }
                     }
-                    System.out.println("Weather reports fetched and saved successfully.");
+                    log.info("Weather reports fetched and saved successfully.");
                 }
             } else {
                 log.error("Failed to fetch weather data. HTTP error code: {}", responseCode);
